@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SE-LIST</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+    <div id="app">
+        <div class="container mt-5">
+            <div class="row">
+                
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">🔍︎</span>
+                    <input type="text" v-model="keyword" class="form-control" placeholder="各SEのボタンをクリックしてクリップボードにコピーできます" aria-label="SE-Name" aria-describedby="basic-addon1">
+                  </div>
+                
+                <ul class="list-group" v-for="item in filtered">
+                    <!-- <li class="list-group-item">{{item[0]}}     <audio controls v-bind:src="item[1]"></audio> <br> @hanako se-add {{item[0]}} {{item[1]}}</li> -->
+                            <button class="list-group-item btn btn-light" @click="copyToClipboard(item[0])" >{{item[0]}}</li>
+        
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                keyword: '',
+                message: {dict:[]},
+                history: []
+            },
+            computed: {
+            filtered: function() {
+
+                var messages = [];
+                console.log(this.message.dict)
+                for(const i of this.message.dict) {
+
+                    if(i[0].indexOf(this.keyword) !== -1) {
+                        
+                        messages.push(i);
+
+                    }
+
+                }
+
+                return messages;
+
+            },
+            
+             },
+             methods: {
+                copyToClipboard(text) {
+                    navigator.clipboard.writeText(text)
+                    .then(() => {
+                        console.log("copied!")
+
+                    })
+                    .catch(e => {
+                        console.error(e)
+                    })
+                }
+            }
+        })
+        
+        axios.get('./se').then((res) => {
+            app.$data.message = res.data; 
+            console.log(res);
+        })
+    </script>
+</body>
+</html>
