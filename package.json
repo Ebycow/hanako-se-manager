@@ -1,18 +1,11 @@
 {
-  "name": "hanako-se-manager",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "selist",
+  "version": "2.0.0",
+  "description": "読み上げ花子に登録されたSEの一覧",
+  "private": true,
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "dotenv": "^16.0.1",
-    "express": "^4.17.1",
-    "express-basic-auth": "^1.2.0",
-    "nedb": "^1.8.0"
-  }
+  "license": "ISC"
 }

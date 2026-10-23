@@ -1,0 +1,25 @@
+services:
+  selist:
+    build: .
+    image: selist:latest
+    container_name: selist
+    restart: unless-stopped
+    init: true
+    environment:
+      # 一覧を表示する Discord サーバー（.env で指定）
+      SELIST_SERVER_ID: ${SELIST_SERVER_ID:?.env に SELIST_SERVER_ID を設定してください}
+    volumes:
+      # hanako の DB を読み取り専用で見る（selist から hanako の DB を書き換えないようにする）
+      - hanako_db:/data:ro
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8750/healthz').then(r => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    # ホストにはポートを開けない。リバースプロキシとつなぐネットワークは compose.override.yaml で足す
+
+volumes:
+  hanako_db:
+    external: true
+    name: hanako_db

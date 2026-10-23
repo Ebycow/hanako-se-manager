@@ -1,1 +1,7 @@
-node_modules
+# 環境ごとの設定
+.env
+compose.override.yaml
+
+node_modules/
+npm-debug.log*
+.DS_Store

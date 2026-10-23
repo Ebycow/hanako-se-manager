@@ -1,80 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SE-LIST</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>はなこSEリスト</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <div id="app">
-        <div class="container mt-5">
-            <div class="row">
-                
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">🔍︎</span>
-                    <input type="text" v-model="keyword" class="form-control" placeholder="各SEのボタンをクリックしてクリップボードにコピーできます" aria-label="SE-Name" aria-describedby="basic-addon1">
-                  </div>
-                
-                <ul class="list-group" v-for="item in filtered">
-                    <!-- <li class="list-group-item">{{item[0]}}     <audio controls v-bind:src="item[1]"></audio> <br> @hanako se-add {{item[0]}} {{item[1]}}</li> -->
-                            <button class="list-group-item btn btn-light" @click="copyToClipboard(item[0])" >{{item[0]}}</li>
-        
-                </ul>
-            </div>
-
+    <header class="header">
+        <div class="wrap">
+            <h1>はなこSEリスト</h1>
+            <p class="lead">クリックするとSE名をコピーします。先頭が同じSEは同じ系統の色になります</p>
+            <label class="search">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <input id="q" type="search" placeholder="SEを検索" autocomplete="off" autofocus>
+                <span id="count" class="count"></span>
+            </label>
         </div>
+    </header>
 
-    </div>
+    <main class="wrap">
+        <p id="status" class="status">読み込み中…</p>
+        <ul id="list" class="grid"></ul>
+    </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script>
-        var app = new Vue({
-            el: '#app',
-            data: {
-                keyword: '',
-                message: {dict:[]},
-                history: []
-            },
-            computed: {
-            filtered: function() {
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-                var messages = [];
-                console.log(this.message.dict)
-                for(const i of this.message.dict) {
-
-                    if(i[0].indexOf(this.keyword) !== -1) {
-                        
-                        messages.push(i);
-
-                    }
-
-                }
-
-                return messages;
-
-            },
-            
-             },
-             methods: {
-                copyToClipboard(text) {
-                    navigator.clipboard.writeText(text)
-                    .then(() => {
-                        console.log("copied!")
-
-                    })
-                    .catch(e => {
-                        console.error(e)
-                    })
-                }
-            }
-        })
-        
-        axios.get('./se').then((res) => {
-            app.$data.message = res.data; 
-            console.log(res);
-        })
-    </script>
+    <script src="./classify.js"></script>
+    <script src="./app.js"></script>
 </body>
 </html>
